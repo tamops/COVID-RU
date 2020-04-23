@@ -1,7 +1,0 @@
-"0",""
-"0","valueBox(value = paste(format(sum(df$death, na.rm = TRUE), big.mark = "",""), "" ("","
-"0","                       round(100 * sum(df$death, na.rm = TRUE) / sum(df$confirmed), 1), "
-"0","                       ""%)"", sep = """"),"
-"0","         caption = ""летальных исходов"", "
-"0","         icon = ""fas fa-heart-broken"", "
-"0","         color = death_color)"

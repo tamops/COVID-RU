@@ -5,13 +5,15 @@
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "3894133566",
+    "hash" : "2236514870",
     "id" : "6EEC37AD",
-    "lastKnownWriteTime" : 1586527173,
-    "last_content_update" : 1586527173,
+    "lastKnownWriteTime" : 1587672579,
+    "last_content_update" : 1587672579465,
     "path" : "~/Desktop/ДЗ. г. Москва/Статистика/COVID-19/COVID-RU/README.md",
     "project_path" : "README.md",
     "properties" : {
+        "cursorPosition" : "8,0",
+        "scrollLine" : "0"
     },
     "read_only" : false,
     "read_only_alternatives" : [

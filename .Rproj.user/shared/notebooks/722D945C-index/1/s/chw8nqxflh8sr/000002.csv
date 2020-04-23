@@ -1,5 +1,0 @@
-"0",""
-"0","valueBox(value = paste(format(sum(df$confirmed), big.mark = "",""), """", sep = "" ""), "
-"0","         caption = ""Всего заболевших"", "
-"0","         icon = ""fas fa-user-md"", "
-"0","         color = confirmed_color)"

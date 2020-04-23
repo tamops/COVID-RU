@@ -2,19 +2,19 @@
     "collab_server" : "",
     "contents" : "",
     "created" : 1586528136441.000,
-    "dirty" : false,
+    "dirty" : true,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "3350681684",
+    "hash" : "1938581384",
     "id" : "CE0C9769",
-    "lastKnownWriteTime" : 1587663719,
-    "last_content_update" : 1587663719216,
+    "lastKnownWriteTime" : 1587673762,
+    "last_content_update" : 1587673979114,
     "path" : "~/Desktop/ДЗ. г. Москва/Статистика/COVID-19/COVID-RU/index.Rmd",
     "project_path" : "index.Rmd",
     "properties" : {
-        "cursorPosition" : "186,3",
-        "last_setup_crc32" : "273997A7ca89efd2",
-        "scrollLine" : "185"
+        "cursorPosition" : "54,22",
+        "last_setup_crc32" : "273997A78189c767",
+        "scrollLine" : "45"
     },
     "read_only" : false,
     "read_only_alternatives" : [

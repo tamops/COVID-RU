@@ -4,6 +4,7 @@ output:
   flexdashboard::flex_dashboard:
     orientation: rows
     social: menu
+    logo: logo.png
     source_code: embed
     vertical_layout: fill
 ---
@@ -44,15 +45,14 @@ rf_4 <- read_csv("rf_4.csv")
 
 `%>%` <- magrittr::`%>%`
 #------------------ Parameters ------------------
-# Set colors
+
 # https://www.w3.org/TR/css-color-3/#svg-color
-confirmed_color <- "purple"
-active_color <- "#1f77b4"
+confirmed_color <- "#283C72"
+active_color <- "#C0232C"
 recovered_color <- "forestgreen"
 death_color <- "black"
-#------------------ Data ------------------
+####------------------ Data ------------------
 df <- coronavirus %>% 
-  # dplyr::filter(date == max(date)) %>%
   dplyr::group_by(Country.Region, type) %>%
   dplyr::summarise(total = sum(cases)) %>%
   tidyr::pivot_wider(names_from =  type, 
@@ -66,21 +66,6 @@ df <- coronavirus %>%
   dplyr::mutate(country = trimws(country)) %>%
   dplyr::mutate(country = factor(country, levels = country))
 
-df_daily <- coronavirus %>% 
-  dplyr::group_by(date, type) %>%
-  dplyr::summarise(total = sum(cases, na.rm = TRUE)) %>%
-  tidyr::pivot_wider(names_from = type,
-                     values_from = total) %>%
-  dplyr::arrange(date) %>%
-  dplyr::ungroup() %>%
-  dplyr::mutate(active =  confirmed - death - recovered) %>%
-  dplyr::mutate(confirmed_cum = cumsum(confirmed),
-                death_cum = cumsum(death),
-                recovered_cum = cumsum(recovered),
-                active_cum = cumsum(active))
-  
-
-df1 <- coronavirus %>% dplyr::filter(date == max(date))
 
 ```
 
@@ -140,17 +125,17 @@ Row
 
 ```{r daily_summary}
 
-df_summary <- coronavirus %>% 
-  # dplyr::filter(Country.Region != "Others") %>%
-  dplyr::group_by(Country.Region, type) %>%
-  dplyr::summarise(total_cases = sum(cases)) %>%
-  tidyr::pivot_wider(names_from = type, values_from = total_cases) %>%
-  dplyr::arrange(- confirmed) %>%
-  dplyr::filter(confirmed >= 25) %>%
-  dplyr::select(country = Country.Region, confirmed, death, recovered) %>%
-  dplyr::mutate(death_rate = death / confirmed*100) %>% 
-  ungroup()%>% 
-  dplyr::mutate(country = factor(country, levels = country))
+# df_summary <- coronavirus %>% 
+#   # dplyr::filter(Country.Region != "Others") %>%
+#   dplyr::group_by(Country.Region, type) %>%
+#   dplyr::summarise(total_cases = sum(cases)) %>%
+#   tidyr::pivot_wider(names_from = type, values_from = total_cases) %>%
+#   dplyr::arrange(- confirmed) %>%
+#   dplyr::filter(confirmed >= 25) %>%
+#   dplyr::select(country = Country.Region, confirmed, death, recovered) %>%
+#   dplyr::mutate(death_rate = death / confirmed*100) %>% 
+#   ungroup()%>% 
+#   dplyr::mutate(country = factor(country, levels = country))
 
 plotly::plot_ly(data = df[1:30, ], 
                 x = ~ country, 
@@ -158,7 +143,7 @@ plotly::plot_ly(data = df[1:30, ],
                 #text =  ~ confirmed, 
                 #textposition = 'auto',
                 type = "bar", 
-                name = "Заболевшие",
+                name = "Активные",
                 marker = list(color = active_color)) %>%
   plotly::add_trace(y = ~ recovered,
                     # text =  ~ recovered,
@@ -197,7 +182,8 @@ knitr::kable(coronavirus %>%
   dplyr::arrange(- confirmed) %>%
   dplyr::filter(confirmed >= 25) %>%
   dplyr::select(Страна = Country.Region, confirmed, death, recovered) %>%
-  dplyr::mutate("Доля выздоровевших" = recovered/confirmed*100,
+  dplyr::mutate("Новые случаи" = confirmed - sum(death, recovered),
+                "Доля выздоровевших" = recovered/confirmed*100,
                 "Доля умерших" = death / confirmed*100)%>%
   dplyr::  rename(.,Заболевшие = confirmed, Выздоровевшие = recovered,  Умершие= death), digits = 2)
 ```
@@ -431,6 +417,11 @@ knitr::kable(data_rf2 %>%
 
 * Данные по общей статистике заболеваемости по миру забирались из репозитория [coronavirus](https://github.com/RamiKrispin/coronavirus),
 * Заболеваемость по РФ  [стопкоронавирус.рф](https://xn--80aesfpebagmfblc0a.xn--p1ai/#)
+
+**Автор**
+
+Драгунов Д.О. [РНИМУ](http://rsmu.ru/16372.html)
+[НИИОЗММ](http://niioz.ru/institut/spetsialisty/dragunov-dmitriy-olegovich/)
 
 
 
