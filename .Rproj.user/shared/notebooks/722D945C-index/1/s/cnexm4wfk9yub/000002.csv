@@ -1,0 +1,5 @@
+"0","valueBox(value = paste(format(sum(df$recovered, na.rm = TRUE), big.mark = "",""), "" ("","
+"0","                       round(100 * sum(df$recovered, na.rm = TRUE) / sum(df$confirmed), 1), "
+"0","                       ""%)"", sep = """"), "
+"0","         caption = ""Выздоровевших"", icon = ""fas fa-heartbeat"", "
+"0","         color = recovered_color)"

@@ -86,7 +86,7 @@ df1 <- coronavirus %>% dplyr::filter(date == max(date))
 
 Мир
 =======================================================================
-Row
+Row 
 -----------------------------------------------------------------------
 
 ### Всего заболевших {.value-box}
@@ -152,9 +152,9 @@ df_summary <- coronavirus %>%
   ungroup()%>% 
   dplyr::mutate(country = factor(country, levels = country))
 
-plotly::plot_ly(data = df_summary[1:30, ], 
+plotly::plot_ly(data = df[1:30, ], 
                 x = ~ country, 
-                y = ~ confirmed, 
+                y = ~ unrecovered, 
                 #text =  ~ confirmed, 
                 #textposition = 'auto',
                 type = "bar", 
@@ -184,7 +184,8 @@ plotly::plot_ly(data = df_summary[1:30, ],
                  ))
 ```
 
-
+Row {data-width=400}
+-----------------------------------------------------------------------
 
 ### Заболеваемость по странам
     
@@ -302,6 +303,7 @@ Column {data-width=600}
 
 ```{r}
 rf_4_1 <- rf_4 %>% 
+     filter( Дата >	"2020-03-15") %>% 
     # select(., c(1, 3, 5, 7)) %>% 
      pivot_longer(cols = c(-Дата) , names_to = "Случии") %>% 
    # filter(Дата > "2020-03-01") %>% 

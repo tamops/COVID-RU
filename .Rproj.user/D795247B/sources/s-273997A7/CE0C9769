@@ -5,13 +5,16 @@
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "2660057778",
+    "hash" : "3350681684",
     "id" : "CE0C9769",
-    "lastKnownWriteTime" : 1586449246,
-    "last_content_update" : 1586449246,
+    "lastKnownWriteTime" : 1587663719,
+    "last_content_update" : 1587663719216,
     "path" : "~/Desktop/ДЗ. г. Москва/Статистика/COVID-19/COVID-RU/index.Rmd",
     "project_path" : "index.Rmd",
     "properties" : {
+        "cursorPosition" : "186,3",
+        "last_setup_crc32" : "273997A7ca89efd2",
+        "scrollLine" : "185"
     },
     "read_only" : false,
     "read_only_alternatives" : [
