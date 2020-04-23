@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1586528136441.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2660057778",
+    "id" : "CE0C9769",
+    "lastKnownWriteTime" : 1586449246,
+    "last_content_update" : 1586449246,
+    "path" : "~/Desktop/ДЗ. г. Москва/Статистика/COVID-19/COVID-RU/index.Rmd",
+    "project_path" : "index.Rmd",
+    "properties" : {
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}
