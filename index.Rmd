@@ -1,5 +1,6 @@
 ---
 title: "Короновирус"
+date: "`r format(Sys.time(), '%d.%m.%Y')`"
 output: 
   flexdashboard::flex_dashboard:
     orientation: rows
@@ -45,7 +46,7 @@ rf_4 <- read_csv("rf_4.csv")
 
 `%>%` <- magrittr::`%>%`
 #------------------ Parameters ------------------
-# Set colors
+
 # https://www.w3.org/TR/css-color-3/#svg-color
 confirmed_color <- "#283C72"
 active_color <- "#C0232C"
@@ -53,7 +54,6 @@ recovered_color <- "forestgreen"
 death_color <- "black"
 ####------------------ Data ------------------
 df <- coronavirus %>% 
-  # dplyr::filter(date == max(date)) %>%
   dplyr::group_by(Country.Region, type) %>%
   dplyr::summarise(total = sum(cases)) %>%
   tidyr::pivot_wider(names_from =  type, 
@@ -114,7 +114,7 @@ valueBox(value = paste(format(sum(df$death, na.rm = TRUE), big.mark = ","), " ("
                        round(100 * sum(df$death, na.rm = TRUE) / sum(df$confirmed), 1), 
                        "%)", sep = ""),
          caption = "летальных исходов", 
-         icon = "fas fa-heart-broken", 
+         icon = "far fa-book-dead", 
          color = death_color)
 ```
 
@@ -183,7 +183,7 @@ knitr::kable(coronavirus %>%
   dplyr::arrange(- confirmed) %>%
   dplyr::filter(confirmed >= 25) %>%
   dplyr::select(Страна = Country.Region, confirmed, death, recovered) %>%
-  dplyr::mutate("Новые случаи" = confirmed - sum(death, recovered),
+  dplyr::mutate("Активные" = confirmed - sum(death, recovered),
                 "Доля выздоровевших" = recovered/confirmed*100,
                 "Доля умерших" = death / confirmed*100)%>%
   dplyr::  rename(.,Заболевшие = confirmed, Выздоровевшие = recovered,  Умершие= death), digits = 2)
