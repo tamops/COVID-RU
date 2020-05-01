@@ -43,6 +43,7 @@ library(flexdashboard)
 
 covid_rf <- read_csv("covid_rf.csv")
 rf_4 <- read_csv("rf_4.csv")
+reg_rf2 <- read_csv("reg_rf2.csv")
 
 `%>%` <- magrittr::`%>%`
 #------------------ Parameters ------------------
@@ -335,35 +336,37 @@ Column {data-width=400}
 ### ТОП- 10 регионов по заболеваемости COVID-19 в РФ 
 
 ```{r}
-#Сюда данные по заболеваймости за стутки по РФ
-crf_url <- "https://xn--80aesfpebagmfblc0a.xn--p1ai/#"
+# #Сюда данные по заболеваймости за стутки по РФ
+# crf_url <- "https://xn--80aesfpebagmfblc0a.xn--p1ai/#"
+# 
+# 
+# crf_raw <- crf_url%>%
+#   xml2:: read_html()%>%
+#   html_nodes("table") %>% 
+#   #rvest :: html_node (xpath = '// * [@ id = "mw-content-text"] / div / table [3]')#%>%htmltab()
+#   rvest :: html_table (fill = TRUE,
+#                        header = FALSE) 
+# 
+# names_tab <-c("Регион", "Заболевших", "Выздоровевших", "Умерло")
+# t <- crf_raw[[1]]
+# colnames(t) <- names_tab 
+# 
+# data_rf2 <- as_tibble(t) %>% 
+#   pivot_longer(-Регион, names_to = "события", values_to = "значения")#
 
-crf_raw <- crf_url%>%
-  xml2:: read_html()%>%
-  html_nodes("table") %>% 
-  #rvest :: html_node (xpath = '// * [@ id = "mw-content-text"] / div / table [3]')#%>%htmltab()
-  rvest :: html_table (fill = TRUE,
-                       header = FALSE) 
-
-names_tab <-c("Регион", "Заболевших", "Выздоровевших", "Умерло")
-t <- crf_raw[[1]]
-colnames(t) <- names_tab 
-
-data_rf2 <- as_tibble(t) %>% 
-  pivot_longer(-Регион, names_to = "события", values_to = "значения")#
 
 ### График plotly
-data_rf2 %>% 
-  filter(события == "Заболевших") %>% 
-  top_n(10, wt = значения) %>%
-  mutate(Регион = fct_reorder(Регион,значения)) %>%
-  plot_ly(x = ~ Регион, y = ~ значения) %>% 
+reg_rf2  %>% 
+  select (Регион, Заболело) %>% 
+  top_n(10, wt = Заболело) %>%
+  mutate(Регион = fct_reorder(Регион,Заболело)) %>%
+  plot_ly(x = ~ Регион, y = ~ Заболело) %>% 
   add_column() %>% 
   layout(barmode = 'stack',
          title = "Заболеваемость по регионам РФ",
-                 yaxis = list(title = "", type = "log"),
-                 xaxis = list(title = ""),
-                 hovermode = "compare")
+         yaxis = list(title = "", type = "log"),
+         xaxis = list(title = ""),
+         hovermode = "compare")
 
 
 ```
@@ -374,10 +377,10 @@ data_rf2 %>%
 
 ```{r}
 
-knitr::kable(data_rf2 %>%
-  pivot_wider(names_from = события, values_from = значения) %>%
-  dplyr::mutate("Доля выздоровевших" = Выздоровевших/Заболевших*100,
-                "Доля умерших" = Умерло/Заболевших*100), digits = 2)
+knitr::kable(reg_rf2%>%
+ # pivot_wider(names_from = события, values_from = значения) %>%
+  dplyr::mutate("Доля выздоровевших" = Выздоровевших/Заболело*100,
+                "Доля умерших" = Умерло/Заболело*100), digits = 2)
 ```
 
 
