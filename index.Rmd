@@ -363,7 +363,8 @@ reg_rf2  %>%
 knitr::kable(reg_rf2%>%
  # pivot_wider(names_from = события, values_from = значения) %>%
   dplyr::mutate("Доля выздоровевших" = Выздоровевших/Заболело*100,
-                "Доля умерших" = Умерло/Заболело*100), digits = 2)
+                "Доля умерших" = Умерло/Заболело*100,
+                 Прирост = (Заболело - Новые)/ Новые * 100), digits = 2)
 ```
 
 
@@ -400,10 +401,18 @@ transmute(Регион, Заболеваймость = Заболело / Нас
 ### Прирост заболеваймости 
 
 ```{r}
-knitr::kable(reg_rf2 %>% 
+reg_rf2 %>% 
   filter(Новые != 0) %>% 
   mutate(Прирост = (Заболело - Новые)/ Новые * 100) %>% 
-  arrange(desc(Прирост)),  digits = 2) 
+   top_n(15, wt = Прирост) %>% 
+   mutate(Регион = fct_reorder(Регион, Прирост)) %>% 
+   plot_ly(x = ~ Регион, y = ~ Прирост) %>% 
+   layout(barmode = 'stack',
+         title = "Прирост по регионам РФ",
+         yaxis = list(title = "", type = "log"),
+         xaxis = list(title = ""),
+         hovermode = "compare")
+  
 ```
 
 
