@@ -44,6 +44,7 @@ library(flexdashboard)
 covid_rf <- read_csv("covid_rf.csv")
 rf_4 <- read_csv("rf_4.csv")
 reg_rf2 <- read_csv("reg_rf2.csv")
+nas_rf <- read_csv("nas_rf.csv")
 
 `%>%` <- magrittr::`%>%`
 #------------------ Parameters ------------------
@@ -330,37 +331,19 @@ plotly::plot_ly(data = rf_4_1) %>%
                  hovermode = "compare")
 ```
 
-Column {data-width=400}
+Column {data-width=400, .tabset}
 -------------------------------------
 
 ### ТОП- 10 регионов по заболеваемости COVID-19 в РФ 
 
 ```{r}
-# #Сюда данные по заболеваймости за стутки по РФ
-# crf_url <- "https://xn--80aesfpebagmfblc0a.xn--p1ai/#"
-# 
-# 
-# crf_raw <- crf_url%>%
-#   xml2:: read_html()%>%
-#   html_nodes("table") %>% 
-#   #rvest :: html_node (xpath = '// * [@ id = "mw-content-text"] / div / table [3]')#%>%htmltab()
-#   rvest :: html_table (fill = TRUE,
-#                        header = FALSE) 
-# 
-# names_tab <-c("Регион", "Заболевших", "Выздоровевших", "Умерло")
-# t <- crf_raw[[1]]
-# colnames(t) <- names_tab 
-# 
-# data_rf2 <- as_tibble(t) %>% 
-#   pivot_longer(-Регион, names_to = "события", values_to = "значения")#
-
 
 ### График plotly
 reg_rf2  %>% 
-  select (Регион, Заболело) %>% 
-  top_n(10, wt = Заболело) %>%
-  mutate(Регион = fct_reorder(Регион,Заболело)) %>%
-  plot_ly(x = ~ Регион, y = ~ Заболело) %>% 
+  select (Регион, Активны) %>% 
+  top_n(10, wt = Активны) %>%
+  mutate(Регион = fct_reorder(Регион,Активны	)) %>%
+  plot_ly(x = ~ Регион, y = ~ Активны) %>% 
   add_column() %>% 
   layout(barmode = 'stack',
          title = "Заболеваемость по регионам РФ",
@@ -383,6 +366,45 @@ knitr::kable(reg_rf2%>%
                 "Доля умерших" = Умерло/Заболело*100), digits = 2)
 ```
 
+
+### Статистика по заболеваймости на 100 000 населения
+
+```{r}
+knitr::kable(left_join(reg_rf2, nas_rf, c("Регион" = "Субъект")) %>% 
+transmute(Регион, Заболеваймость = Заболело / Население * 100000,
+         Активных  =   Активны / Население * 100000,
+         Выздоровевших =  Выздоровевших/Население * 100000,
+         Умерших = Умерло / Население * 100000) %>% 
+    arrange(desc(Заболеваймость)), digits = 2) 
+```
+
+### Топ 10 смертности в регионах на 100000 населения 
+
+```{r}
+left_join(reg_rf2, nas_rf, c("Регион" = "Субъект")) %>% 
+transmute(Регион, Заболеваймость = Заболело / Население * 100000,
+         Активных  =   Активны / Население * 100000,
+         Выздоровевших =  Выздоровевших/Население * 100000,
+         Умерших = Умерло / Население * 100000)  %>% 
+  top_n(10, wt = Умерших) %>%
+  mutate(Регион = fct_reorder(Регион,Умерших )) %>%
+  plot_ly(x = ~ Регион, y = ~ Умерших) %>% 
+  add_column() %>% 
+  layout(barmode = 'stack',
+         title = "Смертность на 100000 по регионам РФ",
+         yaxis = list(title = "", type = "log"),
+         xaxis = list(title = ""),
+         hovermode = "compare")
+```
+
+### Прирост заболеваймости 
+
+```{r}
+knitr::kable(reg_rf2 %>% 
+  filter(Новые != 0) %>% 
+  mutate(Прирост = (Заболело - Новые)/ Новые * 100) %>% 
+  arrange(desc(Прирост)),  digits = 2) 
+```
 
 
 О программе
