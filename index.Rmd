@@ -1,5 +1,5 @@
 ---
-title: "Короновирус"
+title: "Коронавирус"
 date: "`r format(Sys.time(), '%d.%m.%Y')`"
 output: 
   flexdashboard::flex_dashboard:
@@ -340,11 +340,12 @@ Column {data-width=500, .tabset}
 ```{r}
 
 ### График plotly
-reg_rf2  %>% 
-  select (Регион, Активны) %>% 
-  top_n(10, wt = Активны) %>%
-  mutate(Регион = fct_reorder(Регион,Активны	)) %>%
-  plot_ly(x = ~ Регион, y = ~ Активны) %>% 
+left_join(reg_rf3, nas_rf, c("Регион" = "Субъект")) %>% 
+transmute(Регион, Заболеваемость = Заболело / Население*100000) %>% 
+  select (Регион,  Заболеваемость) %>% 
+  top_n(10, wt =  Заболеваемость) %>%
+  mutate(Регион = fct_reorder(Регион, Заболеваемость	)) %>%
+  plot_ly(x = ~ Регион, y = ~  Заболеваемость) %>% 
   add_column() %>% 
   layout(barmode = 'stack',
          title = "Заболеваемость по регионам РФ",
