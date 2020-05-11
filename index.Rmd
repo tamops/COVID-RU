@@ -5,7 +5,7 @@ output:
   flexdashboard::flex_dashboard:
     orientation: rows
     social: menu
-    logo: COVID-RU/blob/master/logo.png
+    logo: graphics/logo.png
     source_code: embed
     vertical_layout: fill
 ---
