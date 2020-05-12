@@ -309,7 +309,7 @@ plotly::plot_ly(data = rf_4_1) %>%
                     y = ~ Выявленые,
                     type = "scatter",
                     mode = "lines+markers",
-                    name = "Новые случаи за сутки",
+                    name = "Активные",
                     line = list(color = active_color),
                     marker = list(color = active_color)) %>%
   plotly::add_trace(x = ~ Дата,
