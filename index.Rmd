@@ -58,14 +58,14 @@ recovered_color <- "forestgreen"
 death_color <- "black"
 ####------------------ Data ------------------
 df <- coronavirus %>% 
-  dplyr::group_by(Country.Region, type) %>%
+  dplyr::group_by(country, type) %>%
   dplyr::summarise(total = sum(cases)) %>%
   tidyr::pivot_wider(names_from =  type, 
                      values_from = total) %>%
   dplyr::mutate(unrecovered = confirmed - ifelse(is.na(recovered), 0, recovered) - ifelse(is.na(death), 0, death)) %>%
   dplyr::arrange(-confirmed) %>%
   dplyr::ungroup() %>%
-  dplyr::mutate(country = dplyr::if_else(Country.Region == "United Arab Emirates", "UAE", Country.Region)) %>%
+  dplyr::mutate(country = dplyr::if_else(country == "United Arab Emirates", "UAE", country)) %>%
   dplyr::mutate(country = dplyr::if_else(country == "Mainland China", "China", country)) %>%
   dplyr::mutate(country = dplyr::if_else(country == "North Macedonia", "N.Macedonia", country)) %>%
   dplyr::mutate(country = trimws(country)) %>%
@@ -130,17 +130,6 @@ Row
 
 ```{r daily_summary}
 
-# df_summary <- coronavirus %>% 
-#   # dplyr::filter(Country.Region != "Others") %>%
-#   dplyr::group_by(Country.Region, type) %>%
-#   dplyr::summarise(total_cases = sum(cases)) %>%
-#   tidyr::pivot_wider(names_from = type, values_from = total_cases) %>%
-#   dplyr::arrange(- confirmed) %>%
-#   dplyr::filter(confirmed >= 25) %>%
-#   dplyr::select(country = Country.Region, confirmed, death, recovered) %>%
-#   dplyr::mutate(death_rate = death / confirmed*100) %>% 
-#   ungroup()%>% 
-#   dplyr::mutate(country = factor(country, levels = country))
 
 plotly::plot_ly(data = df[1:30, ], 
                 x = ~ country, 
@@ -181,12 +170,12 @@ Row {data-width=400}
     
 ```{r}
 knitr::kable(coronavirus %>% 
-  dplyr::group_by(Country.Region, type) %>%
+  dplyr::group_by(country, type) %>%
   dplyr::summarise(total_cases = sum(cases)) %>%
   tidyr::pivot_wider(names_from = type, values_from = total_cases) %>%
   dplyr::arrange(- confirmed) %>%
   dplyr::filter(confirmed >= 25) %>%
-  dplyr::select(Страна = Country.Region, confirmed, death, recovered) %>%
+  dplyr::select(Страна = country, confirmed, death, recovered) %>%
   dplyr::mutate("Активные" = confirmed - sum(death, recovered),
                 "Доля выздоровевших" = recovered/confirmed*100,
                 "Доля умерших" = death / confirmed*100)%>%
@@ -207,15 +196,15 @@ Column {data-width=400}
 ```{r}
 max_date <- max(coronavirus$date)
 coronavirus %>% 
-  filter(Country.Region %in% c("Russia", "Belarus", "Azerbaijan", "Armenia",
+  filter(country %in% c("Russia", "Belarus", "Azerbaijan", "Armenia",
                              "Kazakhstan", "Georgia", "Ukraine", "Uzbekistan"))%>%
   filter(cases != "0")%>%  
-  dplyr::group_by(Country.Region, type) %>%
+  dplyr::group_by(country, type) %>%
   dplyr::filter(type == "confirmed", date == max_date) %>%
-  dplyr::group_by(Country.Region) %>%
+  dplyr::group_by(country) %>%
   dplyr::summarise(total_cases = sum(cases)) %>%
   dplyr::arrange(-total_cases) %>%
-  dplyr::mutate(country = factor(Country.Region, levels = Country.Region)) %>%
+  dplyr::mutate(country = factor(country, levels = country)) %>%
   dplyr::ungroup() %>%
   #dplyr::top_n(n = 15, wt = total_cases) %>%
   plotly::plot_ly(x = ~ country,
@@ -244,16 +233,16 @@ coronavirus %>%
 ```{r}
 library(forcats)
 coronavirus %>% 
-  filter(Country.Region %in% c("Russia", "Belarus", "Azerbaijan", "Armenia",
+  filter(country %in% c("Russia", "Belarus", "Azerbaijan", "Armenia",
                              "Kazakhstan", "Georgia", "Ukraine", "Uzbekistan"))%>%
    filter(cases != "0")%>%  
-  dplyr::group_by(Country.Region, type) %>%
+  dplyr::group_by(country, type) %>%
   summarise(total_cases = sum(cases)) %>%
   ungroup() %>% 
-  mutate(Country.Region  =  fct_reorder(Country.Region, total_cases)) %>% 
+  mutate(country  =  fct_reorder(country, total_cases)) %>% 
   pivot_wider(names_from = type, values_from = total_cases) %>% 
  plotly::plot_ly(data = ., 
-                x = ~ Country.Region, 
+                x = ~ country, 
                 y = ~ confirmed, 
                 # text =  ~ confirmed, 
                 # textposition = 'auto',
