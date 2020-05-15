@@ -40,6 +40,8 @@ library(tidytext)
 library(knitr)
 library(readr)
 library(plotly)
+library(leaflet)
+library(glue)
 library(flexdashboard)
 
 covid_rf <- read_csv("covid_rf.csv")
@@ -47,6 +49,8 @@ rf_4 <- read_csv("rf_4.csv")
 reg_rf2 <- read_csv("reg_rf2.csv")
 nas_rf <- read_csv("nas_rf.csv")
 reg_rf3 <- read_csv("reg_rf3.csv")
+regrfgeo <- read_csv("regrfgeo.csv")
+
 
 `%>%` <- magrittr::`%>%`
 #------------------ Parameters ------------------
@@ -425,6 +429,26 @@ transmute(Регион, Заболеваемость = Заболело / Нас
 <!-- #          hovermode = "compare") -->
 <!-- #    -->
 <!-- <!-- ``` --> -->
+
+
+Карта 
+=======================================================================
+**Карта**
+
+```{r}
+template <-  "<p> { Регион }</p><p> Новых { Новые }</p><p>Активных { Активных }</p><p> Выздоровевших { Выздоровевших }</p><p>Умерших { Умерло }</p>"
+
+reg_rf3 %>%
+  filter(Дата == max(Дата)) %>% 
+  left_join(., regrfgeo, by = c("Регион" =  "Субъект")) %>% 
+  mutate(html = glue(template)) %>% 
+  leaflet() %>% 
+  addTiles() %>% 
+  addCircleMarkers(lng = ~Долгота, lat = ~Широта, popup = ~html)
+
+
+```
+
 
 
 О программе
