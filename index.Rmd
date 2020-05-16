@@ -436,15 +436,17 @@ transmute(Регион, Заболеваемость = Заболело / Нас
 **Карта**
 
 ```{r}
-template <-  "<p> { Регион }</p><p> Новых { Новые }</p><p>Активных { Активных }</p><p> Выздоровевших { Выздоровевших }</p><p>Умерших { Умерло }</p>"
+template <-  "<p> { Регион }</p><p><b>Новых</b> { Новые }</p><p><b>Активных</b> { Активных }</p><p><b>Выздоровевших</b> { Выздоровевших }</p><p><b>Умерших</b> { Умерло }</p>"
 
 reg_rf3 %>%
   filter(Дата == max(Дата)) %>% 
   left_join(., regrfgeo, by = c("Регион" =  "Субъект")) %>% 
   mutate(html = glue(template)) %>% 
+  mutate(trans_zab = log2(Заболело),
+          pal  = colorNumeric(c("blue", "red"), trans_zab)(trans_zab)) %>% 
   leaflet() %>% 
   addTiles() %>% 
-  addCircleMarkers(lng = ~Долгота, lat = ~Широта, popup = ~html)
+  addCircleMarkers(lng = ~Долгота, lat = ~Широта, popup = ~html, color = ~ pal, radius = ~ log(Умерло))
 
 
 ```
@@ -469,6 +471,7 @@ reg_rf3 %>%
 * Графики построены в пакете [plotly](https://plot.ly/r/) 
 * Обработка данных - [dplyr](https://dplyr.tidyverse.org/) [tidyr](https://tidyr.tidyverse.org/)
 * Таблицы - построены  [kable](https://cran.r-project.org/web/packages/kableExtra/vignettes/awesome_table_in_html.html) 
+* Карта - построена с помощью пакета [leaflet](https://rstudio.github.io/leaflet/)
 
 **Данные**
 
