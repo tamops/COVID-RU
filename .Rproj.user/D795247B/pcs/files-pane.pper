@@ -1,9 +1,9 @@
 {
-    "path" : "~/Desktop/ДЗ. г. Москва/Статистика/COVID-19/COVID-RU",
-    "sortOrder" : [
+    "path": "~/Desktop/ДЗ. г. Москва/Статистика/COVID-19/COVID-RU",
+    "sortOrder": [
         {
-            "ascending" : true,
-            "columnIndex" : 2
+            "columnIndex": 2,
+            "ascending": true
         }
     ]
 }
