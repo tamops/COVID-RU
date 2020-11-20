@@ -286,44 +286,80 @@ Column {data-width=400}
 ### Общая заболеваемость по РФ
 
 ```{r}
-rf_4_1 <- rf_4 %>% 
-     filter( Дата >	"2020-03-15") %>% 
-    # select(., c(1, 3, 5, 7)) %>% 
-     pivot_longer(cols = c(-Дата) , names_to = "Случии") %>% 
-   # filter(Дата > "2020-03-01") %>% 
-    #filter(value != "0") %>% 
-    pivot_wider(names_from = Случии, values_from = value)
+# rf_4_1 <- rf_4 %>% 
+#      filter( Дата >	"2020-03-15") %>% 
+#     # select(., c(1, 3, 5, 7)) %>% 
+#      pivot_longer(cols = c(-Дата) , names_to = "Случии") %>% 
+#    # filter(Дата > "2020-03-01") %>% 
+#     #filter(value != "0") %>% 
+#     pivot_wider(names_from = Случии, values_from = value)
+# 
+# 
+#   
+# ###########
+# plotly::plot_ly(data = rf_4_1) %>%
+#   plotly::add_trace(x = ~ Дата,
+#                     y = ~ Выявленые,
+#                     type = "scatter",
+#                     mode = "lines+markers",
+#                     name = "Активные",
+#                     line = list(color = active_color),
+#                     marker = list(color = active_color)) %>%
+#   plotly::add_trace(x = ~ Дата,
+#                     y = ~ Выздоровевшие,
+#                     type = "scatter",
+#                     mode = "lines+markers",
+#                     name = "Выздоровевшие",
+#                     line = list(color = recovered_color),
+#                     marker = list(color = recovered_color)) %>%
+#   plotly::add_trace(x = ~ Дата,
+#                     y = ~ Умершие,
+#                     type = "scatter",
+#                     mode = 'lines+markers',
+#                     name = "Умершие",
+#                     line = list(color = death_color),
+#                     marker = list(color = death_color)) %>%
+#   plotly::layout(title = "",
+#                  yaxis = list(title = "Заболеваемость"),
+#                  xaxis = list(title = "Дата"),
+#                  legend = list(x = 0.1, y = 0.9),
+#                  hovermode = "compare")
 
-
-  
-###########
-plotly::plot_ly(data = rf_4_1) %>%
+rf_4 %>%
+  filter(Дата > "2020-04-01") %>% 
+  mutate(Выявленые = as.numeric(Выявленые),
+         Выздоровевшие = as.numeric(Выздоровевшие),
+         Умершие = as.numeric(Умершие)) %>% 
+  plotly::plot_ly(data = .) %>%
   plotly::add_trace(x = ~ Дата,
-                    y = ~ Выявленые,
-                    type = "scatter",
-                    mode = "lines+markers",
-                    name = "Активные",
-                    line = list(color = active_color),
-                    marker = list(color = active_color)) %>%
+                    y = ~ Умершие,
+                    type = "bar",
+                    name = "Умершие",
+                    marker = list(color = "#4d6263")) %>%
   plotly::add_trace(x = ~ Дата,
                     y = ~ Выздоровевшие,
                     type = "scatter",
                     mode = "lines+markers",
-                    name = "Выздоровевшие",
-                    line = list(color = recovered_color),
-                    marker = list(color = recovered_color)) %>%
+                    name = "выздоровило",
+                    line = list(color = "green"),
+                    marker = list(color = "ultramarine")) %>% 
   plotly::add_trace(x = ~ Дата,
-                    y = ~ Умершие,
+                    y = ~ Выявленые,
                     type = "scatter",
-                    mode = 'lines+markers',
-                    name = "Умершие",
-                    line = list(color = death_color),
-                    marker = list(color = death_color)) %>%
-  plotly::layout(title = "",
-                 yaxis = list(title = "Заболеваемость"),
-                 xaxis = list(title = "Дата"),
-                 legend = list(x = 0.1, y = 0.9),
-                 hovermode = "compare")
+                    mode = "lines+markers",
+                    name = "Выявленые",
+                    line = list(color = "red"),
+                    marker = list(color = "red")) %>% 
+  plotly::layout(yaxis = list(title = "Количество новых случаев за сутки",
+                              type = "log"),
+                 xaxis = list(title = ""),
+                 margin =  list(
+                   l = 10,
+                   r = 10,
+                   b = 10,
+                   t = 10,
+                   pad = 2
+                 ))
 ```
 
 Column {data-width=600, .tabset}
