@@ -516,7 +516,7 @@ reg_rf3 %>%
 
 **Автор**
 
-Драгунов Д.О. [РНИМУ](http://rsmu.ru/16372.html)
+Драгунов Д.О. [РНИМУ](https://rsmu.ru/structure/edu-dept/pf/pf-departments/propaedeutics-of-internal-diseases-dept/faculty/)
 [НИИОЗММ](http://niioz.ru/institut/spetsialisty/dragunov-dmitriy-olegovich/)
 
 
